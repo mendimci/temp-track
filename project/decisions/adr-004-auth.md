@@ -1,5 +1,5 @@
 ---
-status: proposed   # proposed | accepted | superseded
+status: accepted   # proposed | accepted | superseded
 date: 2026-10-06
 ---
 # ADR-004: Authentication: flag-guarded mock now, Entra ID later, behind one abstraction

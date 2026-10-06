@@ -1,5 +1,5 @@
 ---
-status: proposed   # proposed | accepted | superseded
+status: accepted   # proposed | accepted | superseded
 date: 2026-10-06
 ---
 # ADR-002: Hosting: local Docker Compose for the PoC, Docker images on Portainer later

@@ -46,7 +46,15 @@ budget:
   token_cap_usd: null
   pause_at_percent: 80
 
-stack: {}
+# From ADR-001 (stack) and ADR-003 (data store), accepted at Gate kickoff.
+stack:
+  backend: dotnet-10            # ASP.NET Core minimal APIs, EF Core 10 (Npgsql)
+  frontend: react-19-typescript # Vite, React Router, TanStack Query
+  database: postgresql-17
+  auth: mock                    # PoC only; Entra ID later (ADR-004)
+  excel: closedxml              # ADR-005
+  tests: xunit-v3, testcontainers, playwright + axe
+  runtime: docker-compose       # local in the PoC; hosting deferred (ADR-002)
 
 data_rules:
   client_data_allowed: false

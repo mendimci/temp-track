@@ -1,10 +1,10 @@
 ---
 gate: kickoff
-status: pending        # pending | approved | rejected
+status: approved       # pending | approved | rejected
 prepared_by: orchestrator
 prepared_at: 2026-10-06
-decided_by:
-decided_at:
+decided_by: Mendim Mustafa
+decided_at: 2026-10-06
 ---
 # Gate kickoff (PoC): Scope + Architecture + Plan
 
@@ -51,3 +51,15 @@ Stack: .NET 10 minimal APIs + EF Core, React 19 + TypeScript (Vite), PostgreSQL 
 - Estimated hosting cost (USD/month, deferred; PoC week = 0): company Portainer dev 10–20, staging 10–20, prod 40–80 (total 60–120); Azure UK South alternative total 170–230.
 
 ## Tech Lead notes
+Decision: **approved** (Mendim Mustafa, 2026-10-06).
+1. Slice, stack and plan approved as proposed.
+2. Mock login for the PoC; Entra ID spike on day 5 only if the core flow is done.
+3. Head of Nursing → CNO, + Finance ("Agency approval") for Agency and high-cost: accepted as seed-data placeholder.
+4. Cost = headcount × hours × rate(type, band), GBP, threshold GBP 1,000: accepted as placeholders.
+5. PostgreSQL.
+6. Coverage gate report-only in the PoC.
+7. Second backend agent in its own worktree from day 3: yes.
+8. Dry run end of day 5, client demo next morning: yes.
+9. Ignore the missing client documents (presentation PDF, `TempTrack-Demo.html`, pay rates, Excel template); work from the PRD only, using synthetic rates.
+10. Production hosting and data residency (UK vs EU): deferred; ADR-002 accepted for the PoC only (local compose), production host stays open.
+Lower-priority questions (requirements §9, architecture §15): defaults accepted.

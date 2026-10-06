@@ -1,5 +1,5 @@
 ---
-status: proposed   # proposed | accepted | superseded
+status: accepted   # proposed | accepted | superseded
 date: 2026-10-06
 ---
 # ADR-001: Stack: .NET 10 API + React/TypeScript SPA
