@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://code-invention.com/schemas/project.schema.json",
+  "title": "Code-invention AI delivery project settings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["project", "tools", "environments", "secrets_required", "budget", "stack", "data_rules"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "client", "mode", "prd", "tech_lead"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "client": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["poc", "full"] },
+        "prd": {
+          "description": "Markdown file in the repo (default docs/prd.md), or a page URL once a docs integration is enabled",
+          "type": "string",
+          "pattern": "(^https?://)|(\\.md$)"
+        },
+        "tech_lead": { "type": "string", "minLength": 1 }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tracker", "code_host", "ci", "docs"],
+      "properties": {
+        "tracker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "project_key"],
+          "properties": {
+            "provider": { "enum": ["markdown", "jira", "azure-devops", "github-issues"] },
+            "url": { "type": "string", "format": "uri" },
+            "project_key": { "type": "string", "minLength": 1 },
+            "status_map": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["backlog", "ready", "in_progress", "in_review", "done"],
+              "properties": {
+                "backlog": { "$ref": "#/$defs/nonEmpty" },
+                "ready": { "$ref": "#/$defs/nonEmpty" },
+                "in_progress": { "$ref": "#/$defs/nonEmpty" },
+                "in_review": { "$ref": "#/$defs/nonEmpty" },
+                "done": { "$ref": "#/$defs/nonEmpty" }
+              }
+            },
+            "type_map": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["epic", "story", "task", "bug"],
+              "properties": {
+                "epic": { "$ref": "#/$defs/nonEmpty" },
+                "story": { "$ref": "#/$defs/nonEmpty" },
+                "task": { "$ref": "#/$defs/nonEmpty" },
+                "bug": { "$ref": "#/$defs/nonEmpty" }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "provider": { "const": "markdown" } } },
+              "then": { "properties": { "project_key": { "pattern": "^[A-Z][A-Z0-9]*$" } } },
+              "else": { "required": ["status_map", "type_map"] }
+            },
+            {
+              "if": { "properties": { "provider": { "enum": ["jira", "azure-devops"] } } },
+              "then": { "required": ["url"] }
+            }
+          ]
+        },
+        "code_host": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "repo"],
+          "properties": {
+            "provider": { "enum": ["github", "azure-repos", "gitlab"] },
+            "repo": { "type": "string", "pattern": "^[^/\\s]+/[^/\\s]+(/[^/\\s]+)?$" }
+          }
+        },
+        "ci": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider"],
+          "properties": {
+            "provider": { "enum": ["github-actions", "azure-pipelines"] }
+          }
+        },
+        "docs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider"],
+          "properties": {
+            "provider": { "enum": ["markdown", "notion", "confluence", "azure-wiki"] },
+            "decision_log_url": { "type": "string", "format": "uri" }
+          }
+        }
+      }
+    },
+    "environments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dev", "staging", "production"],
+      "properties": {
+        "dev": { "allOf": [{ "$ref": "#/$defs/environment" }, { "required": ["url"] }] },
+        "staging": { "allOf": [{ "$ref": "#/$defs/environment" }, { "required": ["url"] }] },
+        "production": {
+          "allOf": [
+            { "$ref": "#/$defs/environment" },
+            { "properties": { "deploy": { "const": "manual_gated" } } }
+          ]
+        }
+      }
+    },
+    "secrets_required": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pause_at_percent"],
+      "properties": {
+        "project_budget_usd": { "type": "number", "minimum": 0 },
+        "token_cap_percent": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
+        "token_cap_usd": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "pause_at_percent": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+      },
+      "anyOf": [
+        {
+          "required": ["token_cap_usd"],
+          "properties": { "token_cap_usd": { "type": "number" } }
+        },
+        {
+          "required": ["token_cap_percent", "project_budget_usd"],
+          "properties": { "project_budget_usd": { "exclusiveMinimum": 0 } }
+        }
+      ]
+    },
+    "stack": { "type": "object" },
+    "data_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["client_data_allowed"],
+      "properties": {
+        "client_data_allowed": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmpty": { "type": "string", "minLength": 1 },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "deploy"],
+      "properties": {
+        "host": { "enum": ["portainer", "azure", "aws", "dedicated"] },
+        "url": { "type": "string", "format": "uri" },
+        "deploy": { "enum": ["on_merge", "daily", "manual_gated"] }
+      }
+    }
+  }
+}

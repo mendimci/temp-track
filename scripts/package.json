@@ -1,0 +1,15 @@
+{
+  "name": "ci-template-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Tooling for the agent team template, kept separate from the project's own package.json",
+  "scripts": {
+    "validate-project": "node validate-project.mjs",
+    "test": "node --test --experimental-test-coverage --test-coverage-lines=80"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.8.1"
+  }
+}

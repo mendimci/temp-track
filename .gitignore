@@ -1,0 +1,83 @@
+# Secrets and local config (values live in GitHub/Azure environment secrets)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.tfvars
+!*.tfvars.example
+
+# Claude Code: personal settings and agent worktrees
+.claude/settings.local.json
+CLAUDE.local.md
+.worktrees/
+
+# Node.js / TypeScript / React / Angular
+node_modules/
+dist/
+build/
+out/
+.angular/
+.next/
+*.tsbuildinfo
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# .NET
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+TestResults/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Tests and coverage
+coverage/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+lcov.info
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# CI artifacts generated locally
+sbom.cdx.json
+*.sarif
+
+# Infrastructure as code
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Logs
+*.log
+logs/
+
+# Editors and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.DS_Store
+Thumbs.db
+desktop.ini
