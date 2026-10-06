@@ -85,7 +85,7 @@ public class TempTrackDbContext(DbContextOptions<TempTrackDbContext> options) : 
             e.Property(x => x.MatchStaffType).HasConversion<string>().HasMaxLength(16);
             e.Property(x => x.MatchMinCost).HasColumnType("numeric(12,2)");
             e.Property(x => x.ChainCode).HasMaxLength(32);
-            e.HasOne<ApprovalChain>().WithMany().HasForeignKey(x => x.ChainCode).HasPrincipalKey(c => c.Code);
+            e.HasOne<ApprovalChain>().WithMany().HasForeignKey(x => x.ChainCode).HasPrincipalKey(c => c.Code).OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

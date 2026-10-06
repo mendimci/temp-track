@@ -12,7 +12,7 @@ using TempTrack.Api.Infrastructure.Persistence;
 namespace TempTrack.Api.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TempTrackDbContext))]
-    [Migration("20261006131100_InitialReferenceData")]
+    [Migration("20261006133427_InitialReferenceData")]
     partial class InitialReferenceData
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -29,41 +29,52 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("display_name");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(254)
-                        .HasColumnType("character varying(254)");
+                        .HasColumnType("character varying(254)")
+                        .HasColumnName("email");
 
                     b.Property<string>("ExternalId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("external_id");
 
                     b.Property<Guid?>("HomeDepartmentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("home_department_id");
 
                     b.Property<bool>("IsSynthetic")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_synthetic");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("role");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_app_user");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_app_user_email");
 
                     b.HasIndex("ExternalId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_app_user_external_id");
 
-                    b.HasIndex("HomeDepartmentId");
+                    b.HasIndex("HomeDepartmentId")
+                        .HasDatabaseName("ix_app_user_home_department_id");
 
                     b.ToTable("app_user", (string)null);
                 });
@@ -72,19 +83,26 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("code");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_approval_chain");
+
+                    b.HasAlternateKey("Code")
+                        .HasName("ak_approval_chain_code");
 
                     b.ToTable("approval_chain", (string)null);
                 });
@@ -92,22 +110,27 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("TempTrack.Api.Domain.ApprovalChainStep", b =>
                 {
                     b.Property<Guid>("ChainId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("chain_id");
 
                     b.Property<int>("StepOrder")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("step_order");
 
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("label");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("role");
 
-                    b.HasKey("ChainId", "StepOrder");
+                    b.HasKey("ChainId", "StepOrder")
+                        .HasName("pk_approval_chain_step");
 
                     b.ToTable("approval_chain_step", (string)null);
                 });
@@ -116,27 +139,33 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("code");
 
                     b.Property<string>("Directorate")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("directorate");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_department");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_department_code");
 
                     b.ToTable("department", (string)null);
                 });
@@ -145,28 +174,35 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<int>("Band")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("band");
 
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
+                        .HasColumnType("character varying(3)")
+                        .HasColumnName("currency");
 
                     b.Property<decimal>("HourlyRate")
-                        .HasColumnType("numeric(10,2)");
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("hourly_rate");
 
                     b.Property<string>("StaffType")
                         .IsRequired()
                         .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("staff_type");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_pay_rate");
 
                     b.HasIndex("StaffType", "Band")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_pay_rate_staff_type_band");
 
                     b.ToTable("pay_rate", (string)null);
                 });
@@ -175,14 +211,17 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.Property<string>("Code")
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("code");
 
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("label");
 
-                    b.HasKey("Code");
+                    b.HasKey("Code")
+                        .HasName("pk_reason_code");
 
                     b.ToTable("reason_code", (string)null);
                 });
@@ -191,29 +230,37 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("ChainCode")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("chain_code");
 
                     b.Property<decimal?>("MatchMinCost")
-                        .HasColumnType("numeric(12,2)");
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("match_min_cost");
 
                     b.Property<string>("MatchStaffType")
                         .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("match_staff_type");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("priority");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_routing_rule");
 
-                    b.HasIndex("ChainCode");
+                    b.HasIndex("ChainCode")
+                        .HasDatabaseName("ix_routing_rule_chain_code");
 
                     b.HasIndex("Priority")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_routing_rule_priority");
 
                     b.ToTable("routing_rule", (string)null);
                 });
@@ -221,14 +268,18 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("TempTrack.Api.Domain.UserDepartmentScope", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("department_id");
 
-                    b.HasKey("UserId", "DepartmentId");
+                    b.HasKey("UserId", "DepartmentId")
+                        .HasName("pk_user_department_scope");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("DepartmentId")
+                        .HasDatabaseName("ix_user_department_scope_department_id");
 
                     b.ToTable("user_department_scope", (string)null);
                 });
@@ -237,7 +288,8 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("TempTrack.Api.Domain.Department", null)
                         .WithMany()
-                        .HasForeignKey("HomeDepartmentId");
+                        .HasForeignKey("HomeDepartmentId")
+                        .HasConstraintName("fk_app_user_department_home_department_id");
                 });
 
             modelBuilder.Entity("TempTrack.Api.Domain.ApprovalChainStep", b =>
@@ -246,7 +298,8 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                         .WithMany("Steps")
                         .HasForeignKey("ChainId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_approval_chain_step_approval_chain_chain_id");
                 });
 
             modelBuilder.Entity("TempTrack.Api.Domain.RoutingRule", b =>
@@ -255,8 +308,9 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ChainCode")
                         .HasPrincipalKey("Code")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_routing_rule_approval_chain_chain_code");
                 });
 
             modelBuilder.Entity("TempTrack.Api.Domain.UserDepartmentScope", b =>
@@ -265,13 +319,15 @@ namespace TempTrack.Api.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_department_scope_department_department_id");
 
                     b.HasOne("TempTrack.Api.Domain.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_department_scope_app_user_user_id");
                 });
 
             modelBuilder.Entity("TempTrack.Api.Domain.ApprovalChain", b =>

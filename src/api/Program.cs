@@ -20,7 +20,8 @@ builder.Services.AddOpenApi();
 
 // Placeholder default keeps startup and build-time OpenAPI generation working without config
 builder.Services.AddDbContext<TempTrackDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("Default") ?? "Host=localhost;Database=temptrack"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("Default") ?? "Host=localhost;Database=temptrack")
+     .UseSnakeCaseNamingConvention());
 
 if (builder.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {

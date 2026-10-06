@@ -23,6 +23,7 @@ public sealed class SeedTests(SeedTests.SeededFactory factory) : IClassFixture<S
     {
         var hosted = factory.Services.GetServices<IHostedService>().OfType<SeedHostedService>().Single();
         await hosted.StartAsync(TestContext.Current.CancellationToken);
+        // Scope intentionally left to the test host's lifetime: the returned context is used by the caller
         return factory.Services.CreateScope().ServiceProvider.GetRequiredService<TempTrackDbContext>();
     }
 
@@ -84,8 +85,8 @@ public sealed class SeedTests(SeedTests.SeededFactory factory) : IClassFixture<S
 
         var types = await db.Database.SqlQueryRaw<string>(
             "select data_type as \"Value\" from information_schema.columns " +
-            "where (table_name = 'pay_rate' and column_name = 'HourlyRate') " +
-            "or (table_name = 'routing_rule' and column_name = 'MatchMinCost')").ToListAsync(ct);
+            "where (table_name = 'pay_rate' and column_name = 'hourly_rate') " +
+            "or (table_name = 'routing_rule' and column_name = 'match_min_cost')").ToListAsync(ct);
 
         Assert.Equal(["numeric", "numeric"], types);
     }

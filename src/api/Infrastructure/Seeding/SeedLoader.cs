@@ -50,8 +50,13 @@ public sealed class SeedLoader(TempTrackDbContext db, ILogger<SeedLoader> logger
         {
             throw new InvalidOperationException($"Seed file {name}.json is not marked synthetic");
         }
-        return file.Items;
+        return file.Items ?? throw new InvalidOperationException($"Seed file {name}.json has no items");
     }
+
+    private static T Resolve<T>(Dictionary<string, T> map, string key, string file, int index, string what) =>
+        map.TryGetValue(key, out var value)
+            ? value
+            : throw new InvalidOperationException($"Seed file {file}.json item {index}: unknown {what}");
 
     private async Task<Dictionary<string, Department>> UpsertDepartments(List<DepartmentSeed> items, CancellationToken ct)
     {
@@ -73,7 +78,7 @@ public sealed class SeedLoader(TempTrackDbContext db, ILogger<SeedLoader> logger
     private async Task<Dictionary<string, AppUser>> UpsertUsers(List<UserSeed> items, Dictionary<string, Department> departments, CancellationToken ct)
     {
         var existing = await db.Users.ToDictionaryAsync(x => x.Email, ct);
-        foreach (var s in items)
+        foreach (var (i, s) in items.Index())
         {
             if (!existing.TryGetValue(s.Email, out var e))
             {
@@ -82,7 +87,9 @@ public sealed class SeedLoader(TempTrackDbContext db, ILogger<SeedLoader> logger
             }
             e.DisplayName = s.DisplayName;
             e.Role = s.Role;
-            e.HomeDepartmentId = s.HomeDepartment is null ? null : departments[s.HomeDepartment].Id;
+            e.HomeDepartmentId = s.HomeDepartment is null
+                ? null
+                : Resolve(departments, s.HomeDepartment, "users", i, $"department code '{s.HomeDepartment}'").Id;
             e.IsSynthetic = true;
         }
         await db.SaveChangesAsync(ct);
@@ -92,9 +99,11 @@ public sealed class SeedLoader(TempTrackDbContext db, ILogger<SeedLoader> logger
     private async Task UpsertScopes(List<ScopeSeed> items, Dictionary<string, AppUser> users, Dictionary<string, Department> departments, CancellationToken ct)
     {
         var existing = (await db.UserDepartmentScopes.ToListAsync(ct)).Select(x => (x.UserId, x.DepartmentId)).ToHashSet();
-        foreach (var s in items)
+        foreach (var (i, s) in items.Index())
         {
-            var key = (users[s.UserEmail].Id, departments[s.DepartmentCode].Id);
+            var key = (
+                Resolve(users, s.UserEmail, "scopes", i, "user").Id,
+                Resolve(departments, s.DepartmentCode, "scopes", i, $"department code '{s.DepartmentCode}'").Id);
             if (existing.Add(key))
             {
                 db.UserDepartmentScopes.Add(new UserDepartmentScope { UserId = key.Item1, DepartmentId = key.Item2 });
@@ -177,6 +186,9 @@ public sealed class SeedLoader(TempTrackDbContext db, ILogger<SeedLoader> logger
             e.MatchMinCost = s.MatchMinCost;
             e.ChainCode = s.ChainCode;
         }
+        // Rules removed from the seed must stop routing, so rules are mirrored, not just upserted
+        var seeded = items.Select(x => x.Priority).ToHashSet();
+        db.RoutingRules.RemoveRange(existing.Values.Where(x => !seeded.Contains(x.Priority)));
         await db.SaveChangesAsync(ct);
     }
 }
