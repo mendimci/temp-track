@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/api/TempTrack.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/api/TempTrack.Api.Tests/TempTrack.Api.Tests.csproj" />
+  </Folder>
+</Solution>
