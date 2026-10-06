@@ -23,10 +23,12 @@ environments:
   dev:
     host: portainer
     url: https://dev.temptrack.code-invention.com
+    api_url: https://api.dev.temptrack.code-invention.com
     deploy: on_merge
   staging:
     host: portainer
     url: https://staging.temptrack.code-invention.com
+    api_url: https://api.staging.temptrack.code-invention.com
     deploy: daily
   production:
     host: portainer

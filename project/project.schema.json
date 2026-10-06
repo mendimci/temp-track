@@ -159,6 +159,7 @@
       "properties": {
         "host": { "enum": ["portainer", "azure", "aws", "dedicated"] },
         "url": { "type": "string", "format": "uri" },
+        "api_url": { "type": "string", "format": "uri" },
         "deploy": { "enum": ["on_merge", "daily", "manual_gated"] }
       }
     }

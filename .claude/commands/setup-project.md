@@ -18,6 +18,8 @@ Use `project/project.example.yaml` as the schema. Ask the Tech Lead one short gr
    copy the needed servers from `.mcp.integrations.example.json` into `.mcp.json`, ask the Tech Lead to authenticate them with `/mcp`,
    ask for instance URL and project key, read the tracker's real workflow through its MCP server and PROPOSE `status_map` and `type_map` for confirmation.
 4. Environments: dev and staging host (default Portainer on Code-invention infrastructure) and URLs; production host (client Azure/AWS/dedicated or ours).
+   Propose app and API URLs separately with the convention `url: https://<env>.<name>.code-invention.com` and
+   `api_url: https://api.<env>.<name>.code-invention.com`; omit `api_url` only if the Tech Lead says app and API share one host.
 5. Budget: project budget in USD (from the PRD/contract), provisional token cap as a percentage of it (default 5%), optional absolute `token_cap_usd` override, pause at 80%.
 
 Secrets: list the secret NAMES needed and where to store them (GitHub → Settings → Environments, or Azure). NEVER ask for or accept token values in chat. If the user pastes a secret, tell them to revoke it.

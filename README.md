@@ -8,11 +8,11 @@ Temporary staffing request system for **St John & St Elizabeth Hospital**.
 
 ## Environments
 
-| Environment | URL |
-| --- | --- |
-| Dev | https://dev.temptrack.code-invention.com |
-| Staging | https://staging.temptrack.code-invention.com |
-| Production | Code-invention Portainer (gated, Tech Lead approval) |
+| Environment | App | API |
+| --- | --- | --- |
+| Dev | https://dev.temptrack.code-invention.com | https://api.dev.temptrack.code-invention.com |
+| Staging | https://staging.temptrack.code-invention.com | https://api.staging.temptrack.code-invention.com |
+| Production | Code-invention Portainer (gated, Tech Lead approval) | |
 
 ## Commands
 

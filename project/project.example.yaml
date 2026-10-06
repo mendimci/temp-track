@@ -35,11 +35,13 @@ tools:
 environments:
   dev:
     host: portainer    # portainer | azure | aws | dedicated
-    url: https://dev.example.code-invention.com
+    url: https://dev.example.code-invention.com          # app (frontend)
+    api_url: https://api.dev.example.code-invention.com  # API; omit when app and API share one host
     deploy: on_merge
   staging:
     host: portainer
     url: https://staging.example.code-invention.com
+    api_url: https://api.staging.example.code-invention.com
     deploy: daily      # deployed once a day from main
   production:
     host: azure        # client's Azure subscription
