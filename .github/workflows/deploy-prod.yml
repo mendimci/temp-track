@@ -1,0 +1,61 @@
+name: deploy-prod
+
+# Production only: manual trigger by a human, Gate 4 approved, and the `production`
+# environment's required reviewer (Tech Lead) approves the run in GitHub.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Commit SHA on main to release (the image tag built by promote-staging)"
+        required: true
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Must run from main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::deploy-prod must be started from main (got ${{ github.ref }})."
+          exit 1
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gate 4 approved
+        run: |
+          gate=project/decisions/gate-4.md
+          if ! grep -Eq '^status:[[:space:]]*approved' "$gate" 2>/dev/null; then
+            echo "::error::$gate is missing or not approved. Run /gate 4 approve first."
+            exit 1
+          fi
+      - name: Version is on main
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! git merge-base --is-ancestor "$VERSION" origin/main; then
+            echo "::error::$VERSION is not a commit on main."
+            exit 1
+          fi
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+      # TODO(devops-engineer): add the deploy for environments.production.host
+      # (client Azure/AWS/dedicated, IaC in infra/), then a health check against its URL.
+      - name: Deploy (not configured)
+        run: |
+          echo "::error::Production deploy is not configured for this project yet."
+          exit 1

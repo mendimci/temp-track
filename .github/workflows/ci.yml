@@ -1,0 +1,73 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [development, main]
+  push:
+    branches: [development, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-project:
+    name: validate-project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+      - run: npm ci --prefix scripts
+      - name: Test template scripts
+        run: npm test --prefix scripts
+      # Keeps the example and the schema in sync, so derived projects start from a valid file.
+      - name: Validate project.example.yaml
+        run: node scripts/validate-project.mjs project/project.example.yaml
+      - name: Validate project.yaml
+        if: hashFiles('project/project.yaml') != ''
+        run: node scripts/validate-project.mjs project/project.yaml
+      - name: Check backlog items and board
+        if: hashFiles('docs/backlog/items/*.md') != ''
+        run: node scripts/backlog.mjs check
+
+  build-test:
+    name: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # TODO(devops-engineer): replace after Gate 2 with the stack's lint, type check, unit,
+      # integration and contract tests, coverage gate (>= 80% on changed lines) and build.
+      - name: Placeholder until the stack is chosen
+        run: echo "::notice::No stack configured yet; build-test is a placeholder (see CLAUDE.md > Testing)."
+
+  sbom:
+    name: sbom
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate SBOM (CycloneDX)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom.cdx.json
+          artifact-name: sbom.cdx.json
+      - name: Scan for vulnerabilities
+        uses: anchore/scan-action@v6
+        with:
+          sbom: sbom.cdx.json
+          fail-build: true
+          severity-cutoff: critical
+          output-format: table
+      - name: Check licences
+        run: node scripts/check-licences.mjs sbom.cdx.json

@@ -1,0 +1,67 @@
+name: deploy-dev
+
+on:
+  push:
+    branches: [development]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix scripts
+
+      - name: Check readiness
+        id: ready
+        run: |
+          host=$(node scripts/project-config.mjs environments.dev.host)
+          if [ ! -f Dockerfile ] || [ -z "$host" ]; then
+            echo "::notice::No Dockerfile or project.yaml yet; skipping Dev deploy."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$host" != "portainer" ]; then
+            echo "::error::Dev host '$host' has no deploy step yet; the devops-engineer must add one."
+            exit 1
+          fi
+          echo "url=$(node scripts/project-config.mjs environments.dev.url)" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+      - if: steps.ready.outputs.skip != 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: steps.ready.outputs.skip != 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.ready.outputs.image }}:dev
+            ${{ steps.ready.outputs.image }}:${{ github.sha }}
+
+      - name: Trigger Portainer stack webhook
+        if: steps.ready.outputs.skip != 'true'
+        env:
+          WEBHOOK: ${{ secrets.PORTAINER_DEV_WEBHOOK }}
+        run: curl -fsS -X POST "$WEBHOOK"
+
+      - name: Health check
+        if: steps.ready.outputs.skip != 'true'
+        run: bash scripts/health-check.sh "${{ steps.ready.outputs.url }}"

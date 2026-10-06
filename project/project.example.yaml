@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=project.schema.json
+# Copy to project/project.yaml, or run /setup-project to fill it in interactively.
+# Validate with: node scripts/validate-project.mjs
+project:
+  name: example-project
+  client: Example Client
+  mode: poc            # poc | full
+  prd: docs/prd.md     # PRD written from templates/prd-template.md
+  tech_lead: "Name Surname"
+
+tools:
+  tracker:
+    provider: markdown # markdown (default) | jira | azure-devops | github-issues
+    project_key: EX    # ticket prefix: EX-1, EX-2 ... in docs/backlog/
+    # External trackers are enabled later, only after Tech Lead confirmation. Jira example:
+    # provider: jira
+    # url: https://your-org.atlassian.net
+    # project_key: EX
+    # status_map:      # canonical state -> tracker state
+    #   backlog: Backlog
+    #   ready: Selected for Development
+    #   in_progress: In Progress
+    #   in_review: In Review
+    #   done: Done
+    # type_map: { epic: Epic, story: Story, task: Task, bug: Bug }
+  code_host:
+    provider: github   # github | azure-repos | gitlab
+    repo: code-invention/example-project
+  ci:
+    provider: github-actions   # github-actions | azure-pipelines
+  docs:
+    provider: markdown # markdown (default: docs/ and project/decisions/) | notion | confluence | azure-wiki
+    # decision_log_url: https://www.notion.so/...   # only with an external docs tool
+
+environments:
+  dev:
+    host: portainer    # portainer | azure | aws | dedicated
+    url: https://dev.example.code-invention.com
+    deploy: on_merge
+  staging:
+    host: portainer
+    url: https://staging.example.code-invention.com
+    deploy: daily      # deployed once a day from main
+  production:
+    host: azure        # client's Azure subscription
+    deploy: manual_gated
+
+secrets_required:      # names only; values live in GitHub/Azure environment secrets
+  - CLAUDE_CODE_OAUTH_TOKEN   # from `claude setup-token`; uses the Claude subscription, no API cost
+  - PORTAINER_DEV_WEBHOOK
+  - PORTAINER_STAGING_WEBHOOK
+
+budget:
+  project_budget_usd: 10000  # delivery price from the PRD/contract
+  token_cap_percent: 5       # provisional cap = this % of the project budget
+  token_cap_usd: null        # absolute override; set per project after the pilot (wins over percent)
+  pause_at_percent: 80
+
+stack: {}              # filled by the Solution Architect after Gate 2
+
+data_rules:
+  client_data_allowed: false   # PoCs use synthetic data
