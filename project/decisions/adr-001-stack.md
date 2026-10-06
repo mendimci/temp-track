@@ -15,7 +15,7 @@ maintain the result after handover.
   Npgsql, built-in `Microsoft.AspNetCore.OpenApi` to generate the OpenAPI document from code, built-in JSON console
   logging. One project with `Domain/`, `Features/`, `Infrastructure/` folders (layout in `docs/architecture.md` §10).
 - **Frontend:** React 19 + TypeScript (strict), Vite, React Router, TanStack Query, `openapi-typescript` +
-  `openapi-fetch` for a typed client generated from `docs/api/openapi.yaml`, React Hook Form. Plain CSS, no component
+  `openapi-fetch` for a typed client generated from `docs/api/openapi.json`, React Hook Form. Plain CSS, no component
   library (accessibility from semantic HTML).
 - **Tests:** xUnit v3, Testcontainers (PostgreSQL), Playwright + `@axe-core/playwright`.
 - **Style:** `dotnet format`, ESLint + Prettier, enforced in CI.
