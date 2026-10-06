@@ -37,15 +37,101 @@ jobs:
         if: hashFiles('docs/backlog/items/*.md') != ''
         run: node scripts/backlog.mjs check
 
-  build-test:
-    name: build-test
+  build-test-api:
+    name: build-test-api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # TODO(devops-engineer): replace after Gate 2 with the stack's lint, type check, unit,
-      # integration and contract tests, coverage gate (>= 80% on changed lines) and build.
-      - name: Placeholder until the stack is chosen
-        run: echo "::notice::No stack configured yet; build-test is a placeholder (see CLAUDE.md > Testing)."
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: nuget-${{ runner.os }}-
+      - name: Restore (locked)
+        run: dotnet restore TempTrack.slnx --locked-mode
+      - name: Build (warnings are errors)
+        run: dotnet build TempTrack.slnx --no-restore --configuration Release -warnaserror
+      - name: Check format
+        run: dotnet format TempTrack.slnx --no-restore --verify-no-changes
+      # The build regenerates docs/api/openapi.json; a diff means it was not committed.
+      - name: Check OpenAPI document is up to date
+        run: git diff --exit-code -- docs/api/openapi.json
+      # Testcontainers starts PostgreSQL through the runner's Docker daemon.
+      - name: Test with coverage
+        run: >
+          dotnet test TempTrack.slnx --no-build --configuration Release
+          --collect:"XPlat Code Coverage" --results-directory "$RUNNER_TEMP/api-coverage"
+      - name: Coverage summary (report-only)
+        if: always()
+        run: |
+          file=$(find "$RUNNER_TEMP/api-coverage" -name 'coverage.cobertura.xml' | head -n 1)
+          if [ -n "$file" ]; then
+            rate=$(grep -o -m1 'line-rate="[0-9.]*"' "$file" | head -n 1 | grep -o '[0-9.]*')
+            echo "### API coverage (report-only in PoC)" >> "$GITHUB_STEP_SUMMARY"
+            echo "Line coverage: $(awk -v r="$rate" 'BEGIN { printf "%.1f", r * 100 }')%" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No coverage report found." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-coverage
+          path: ${{ runner.temp }}/api-coverage
+          if-no-files-found: warn
+
+  build-test-web:
+    name: build-test-web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - name: Check generated API types are up to date
+        run: |
+          npm run gen:api
+          git diff --exit-code -- src/api/schema.d.ts
+      - name: Test with coverage
+        run: npm run test:coverage 2>&1 | tee "$RUNNER_TEMP/web-coverage.txt"
+      - name: Coverage summary (report-only)
+        if: always()
+        run: |
+          echo "### Web coverage (report-only in PoC)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          sed -n '/Coverage summary/,$p' "$RUNNER_TEMP/web-coverage.txt" >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - run: npm run build
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-coverage
+          path: src/web/coverage
+          if-no-files-found: warn
+
+  # Stable required-check name: aggregates the API and web jobs.
+  build-test:
+    name: build-test
+    if: always()
+    needs: [build-test-api, build-test-web]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require API and web jobs to pass
+        run: |
+          [ "${{ needs.build-test-api.result }}" = "success" ] && [ "${{ needs.build-test-web.result }}" = "success" ]
 
   sbom:
     name: sbom
