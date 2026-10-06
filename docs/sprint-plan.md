@@ -35,7 +35,7 @@ is the local compose stack; hosted deploy is deferred by the Tech Lead.
 ## 3. Day-by-day plan
 
 Order inside a cell is merge order. A frontend task starts against the OpenAPI types as soon as its backend
-dependency merges (backend PRs regenerate `docs/api/openapi.yaml`).
+dependency merges (backend PRs regenerate `docs/api/openapi.json`).
 
 | Day | Backend | Frontend | DevOps | Milestone (end of day) |
 | --- | --- | --- | --- | --- |

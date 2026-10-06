@@ -24,4 +24,9 @@ Temporary staffing request system for **St John & St Elizabeth Hospital**.
 
 Node 22+. From `src/web`: `npm ci`, then `npm run dev` (reads `public/config.json` for `apiUrl` and `authMode`; point `apiUrl` at the Dev API).
 Checks: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`.
-`npm run gen:api` regenerates `src/api/schema.d.ts` from `docs/api/openapi.yaml`.
+`npm run gen:api` regenerates `src/api/schema.d.ts` from `docs/api/openapi.json`.
+
+## CI
+
+`.github/workflows/ci.yml` runs on every PR: `build-test-api` (locked restore, warnings-as-errors build, `dotnet format --verify-no-changes`, tests with coverage), `build-test-web` (lint, format, typecheck, generated-types check, tests with coverage, build), `build-test` (aggregate gate), `sbom` and `validate-project`. Coverage is report-only in the PoC (step summary and artifacts).
+Locally: `dotnet test TempTrack.slnx --collect:"XPlat Code Coverage"` (needs Docker) and `npm run test:coverage` in `src/web`.

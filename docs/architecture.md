@@ -163,7 +163,7 @@ Routing (ADR-006): at submit, `RoutingPolicy` evaluates `routing_rule` rows in p
 
 REST + JSON under `/api`, errors as ProblemDetails (400 with per-field errors, 403, 404, 409). **The OpenAPI document is
 generated from code** (`Microsoft.AspNetCore.OpenApi`, served at `/openapi/v1.yaml` in Development) and committed
-to `docs/api/openapi.yaml` by the build; the SPA's TypeScript types are generated from that file
+to `docs/api/openapi.json` by the build; the SPA's TypeScript types are generated from that file
 (`openapi-typescript`). Hand-editing the spec is not allowed.
 
 | Method and path | Purpose | Roles | Story |
@@ -301,7 +301,7 @@ temp-track/
     api/TempTrack.Api.Tests/     unit (cost, routing) + API smoke (WebApplicationFactory + Testcontainers)
     e2e/                         Playwright smoke + axe
   seed/                          departments, users, scopes, pay-rates, reasons, chains, routing-rules (JSON, synthetic)
-  docs/api/openapi.yaml          generated from the API build
+  docs/api/openapi.json          generated from the API build
   docker-compose.yml             db, api, web
   .env.example, TempTrack.slnx, global.json, Directory.Build.props, .editorconfig
 ```
