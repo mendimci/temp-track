@@ -24,11 +24,7 @@ _None_
 
 _None_
 
-## Ready (0)
-
-_None_
-
-## Backlog (49)
+## Ready (4)
 
 | Key | Type | Title | Parent | Labels | Est | PR |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -36,6 +32,11 @@ _None_
 | [TT-25](backlog/items/TT-25.md) | task | Scaffold React SPA with app shell and API client | TT-9 | frontend | M |  |
 | [TT-26](backlog/items/TT-26.md) | task | Set up CI build, lint, test and SBOM for API and web | TT-1 | devops | M |  |
 | [TT-27](backlog/items/TT-27.md) | task | Add reference data model and idempotent seed loader | TT-8 | backend | M |  |
+
+## Backlog (45)
+
+| Key | Type | Title | Parent | Labels | Est | PR |
+| --- | --- | --- | --- | --- | --- | --- |
 | [TT-28](backlog/items/TT-28.md) | task | Containerise API and web, compose stack, Playwright smoke harness | TT-1 | devops | M |  |
 | [TT-29](backlog/items/TT-29.md) | task | Add mock dev-user auth, /api/me and reference-data API | TT-9 | backend | M |  |
 | [TT-30](backlog/items/TT-30.md) | task | Add append-only audit event store and writer | TT-20 | backend | S |  |
