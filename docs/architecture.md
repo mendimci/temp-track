@@ -72,7 +72,7 @@ Integration points:
 
 ## 4. Data model
 
-Conventions: `uuid` ids (except `audit_event` and `outbox_message`: `bigint identity`, ordered), snake_case tables,
+Conventions: `uuid` ids (except `audit_event` and `outbox_message`: `bigint identity`, ordered), snake_case tables and columns (EFCore.NamingConventions),
 all instants `timestamptz` in UTC, money `numeric` (never float), enums stored as text.
 
 ```mermaid

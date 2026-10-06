@@ -1,0 +1,13 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "userEmail": "hon@example.invalid",
+      "departmentCode": "WARD-A"
+    },
+    {
+      "userEmail": "hon@example.invalid",
+      "departmentCode": "WARD-B"
+    }
+  ]
+}

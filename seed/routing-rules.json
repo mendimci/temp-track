@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "priority": 10,
+      "matchStaffType": "Agency",
+      "matchMinCost": null,
+      "chainCode": "extended"
+    },
+    {
+      "priority": 20,
+      "matchStaffType": null,
+      "matchMinCost": 1000,
+      "chainCode": "extended"
+    },
+    {
+      "priority": 100,
+      "matchStaffType": null,
+      "matchMinCost": null,
+      "chainCode": "standard"
+    }
+  ]
+}

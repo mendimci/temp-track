@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TempTrack.Api.Infrastructure.Http;
 using TempTrack.Api.Infrastructure.Persistence;
+using TempTrack.Api.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +20,17 @@ builder.Services.AddOpenApi();
 
 // Placeholder default keeps startup and build-time OpenAPI generation working without config
 builder.Services.AddDbContext<TempTrackDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("Default") ?? "Host=localhost;Database=temptrack"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("Default") ?? "Host=localhost;Database=temptrack")
+     .UseSnakeCaseNamingConvention());
 
 if (builder.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {
     builder.Services.AddHostedService<MigrationHostedService>();
+}
+
+if (builder.Configuration.GetValue<bool>("Seed:Enabled"))
+{
+    builder.Services.AddHostedService<SeedHostedService>();
 }
 
 var app = builder.Build();

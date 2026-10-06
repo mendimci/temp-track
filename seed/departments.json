@@ -1,0 +1,25 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "code": "WARD-A",
+      "name": "Ward A",
+      "directorate": "Medicine"
+    },
+    {
+      "code": "WARD-B",
+      "name": "Ward B",
+      "directorate": "Medicine"
+    },
+    {
+      "code": "WARD-C",
+      "name": "Ward C",
+      "directorate": "Surgery"
+    },
+    {
+      "code": "THEATRES",
+      "name": "Theatres",
+      "directorate": "Surgery"
+    }
+  ]
+}

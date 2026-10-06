@@ -20,17 +20,16 @@
 
 _None_
 
-## In review (1)
+## In review (2)
 
 | Key | Type | Title | Parent | Labels | Est | PR |
 | --- | --- | --- | --- | --- | --- | --- |
 | [TT-26](backlog/items/TT-26.md) | task | Set up CI build, lint, test and SBOM for API and web | TT-1 | devops | M | [#7](https://github.com/mendimci/temp-track/pull/7) |
+| [TT-27](backlog/items/TT-27.md) | task | Add reference data model and idempotent seed loader | TT-8 | backend | M | [#8](https://github.com/mendimci/temp-track/pull/8) |
 
-## Ready (1)
+## Ready (0)
 
-| Key | Type | Title | Parent | Labels | Est | PR |
-| --- | --- | --- | --- | --- | --- | --- |
-| [TT-27](backlog/items/TT-27.md) | task | Add reference data model and idempotent seed loader | TT-8 | backend | M |  |
+_None_
 
 ## Backlog (45)
 
