@@ -1,5 +1,0 @@
-# Files used only to maintain the template. /setup-project deletes them in a new project.
-# One path per line. README.md is replaced with a project README instead of deleted.
-IMPLEMENTATION_PLAN.md
-README.md
-.template-only

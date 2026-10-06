@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=project.schema.json
+# Validate with: node scripts/validate-project.mjs
+project:
+  name: temptrack
+  client: St John & St Elizabeth Hospital
+  mode: poc
+  prd: docs/prd.md
+  tech_lead: "Mendim Mustafa"
+
+tools:
+  tracker:
+    provider: markdown
+    project_key: TT
+  code_host:
+    provider: github
+    repo: mendimci/temp-track
+  ci:
+    provider: github-actions
+  docs:
+    provider: markdown
+
+environments:
+  dev:
+    host: portainer
+    url: https://dev.temptrack.code-invention.com
+    deploy: on_merge
+  staging:
+    host: portainer
+    url: https://staging.temptrack.code-invention.com
+    deploy: daily
+  production:
+    host: portainer
+    deploy: manual_gated
+
+secrets_required:
+  - CLAUDE_CODE_OAUTH_TOKEN
+  - PORTAINER_DEV_WEBHOOK
+  - PORTAINER_STAGING_WEBHOOK
+  - PORTAINER_PROD_WEBHOOK
+
+budget:
+  project_budget_usd: 44000  # PRD total is 44,000 EUR; used as-is per Tech Lead
+  token_cap_percent: 5
+  token_cap_usd: null
+  pause_at_percent: 80
+
+stack: {}
+
+data_rules:
+  client_data_allowed: false
