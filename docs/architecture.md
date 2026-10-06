@@ -162,7 +162,7 @@ Routing (ADR-006): at submit, `RoutingPolicy` evaluates `routing_rule` rows in p
 ## 6. API surface
 
 REST + JSON under `/api`, errors as ProblemDetails (400 with per-field errors, 403, 404, 409). **The OpenAPI document is
-generated from code** (`Microsoft.AspNetCore.OpenApi`, served at `/openapi/v1.yaml` in Development) and committed
+generated from code** (`Microsoft.AspNetCore.OpenApi`, served at `/openapi/v1.json` in Development) and committed
 to `docs/api/openapi.json` by the build; the SPA's TypeScript types are generated from that file
 (`openapi-typescript`). Hand-editing the spec is not allowed.
 
