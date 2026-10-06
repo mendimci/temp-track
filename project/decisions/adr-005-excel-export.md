@@ -1,5 +1,5 @@
 ---
-status: proposed   # proposed | accepted | superseded
+status: accepted   # proposed | accepted | superseded
 date: 2026-10-06
 ---
 # ADR-005: Excel export library: ClosedXML

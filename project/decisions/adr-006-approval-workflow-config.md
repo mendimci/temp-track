@@ -1,5 +1,5 @@
 ---
-status: proposed   # proposed | accepted | superseded
+status: accepted   # proposed | accepted | superseded
 date: 2026-10-06
 ---
 # ADR-006: Approval workflow: data-driven chains and routing rules, hand-written state machine
