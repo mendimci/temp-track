@@ -20,19 +20,19 @@
 
 _None_
 
-## In review (2)
+## In review (3)
 
 | Key | Type | Title | Parent | Labels | Est | PR |
 | --- | --- | --- | --- | --- | --- | --- |
 | [TT-24](backlog/items/TT-24.md) | task | Scaffold .NET API with health, logging and OpenAPI | TT-8 | backend | M | [#6](https://github.com/mendimci/temp-track/pull/6) |
 | [TT-25](backlog/items/TT-25.md) | task | Scaffold React SPA with app shell and API client | TT-9 | frontend | M | [#5](https://github.com/mendimci/temp-track/pull/5) |
+| [TT-27](backlog/items/TT-27.md) | task | Add reference data model and idempotent seed loader | TT-8 | backend | M | [#8](https://github.com/mendimci/temp-track/pull/8) |
 
-## Ready (2)
+## Ready (1)
 
 | Key | Type | Title | Parent | Labels | Est | PR |
 | --- | --- | --- | --- | --- | --- | --- |
 | [TT-26](backlog/items/TT-26.md) | task | Set up CI build, lint, test and SBOM for API and web | TT-1 | devops | M |  |
-| [TT-27](backlog/items/TT-27.md) | task | Add reference data model and idempotent seed loader | TT-8 | backend | M |  |
 
 ## Backlog (45)
 
