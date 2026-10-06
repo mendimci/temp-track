@@ -17,6 +17,7 @@ public sealed class ProblemDetailsTests
         await using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(b =>
         {
             b.UseEnvironment("Production");
+            b.UseSetting("ConnectionStrings:Default", "Host=unused");
             b.ConfigureServices(s => s.AddScoped<TempTrackDbContext>(_ => throw new InvalidOperationException("boom")));
         });
         var client = factory.CreateClient();

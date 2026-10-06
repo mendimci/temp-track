@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using TempTrack.Api.Infrastructure.Http;
 using TempTrack.Api.Infrastructure.Persistence;
@@ -18,10 +19,26 @@ builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
 });
 builder.Services.AddOpenApi();
 
-// Placeholder default keeps startup and build-time OpenAPI generation working without config
+// Build-time OpenAPI generation loads the app without config or a database
+var isOpenApiBuild = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
+var connectionString = builder.Configuration.GetConnectionString("Default");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    connectionString = isOpenApiBuild
+        ? "Host=localhost;Database=temptrack"
+        : throw new InvalidOperationException("ConnectionStrings:Default is not configured");
+}
+
 builder.Services.AddDbContext<TempTrackDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("Default") ?? "Host=localhost;Database=temptrack")
-     .UseSnakeCaseNamingConvention());
+    o.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
+
+const string CorsPolicy = "Spa";
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(o => o.AddPolicy(CorsPolicy, p => p
+    .WithOrigins(allowedOrigins)
+    .WithMethods("GET", "POST", "PUT")
+    .WithHeaders(CorrelationIdMiddleware.HeaderName, "Content-Type")
+    .WithExposedHeaders(CorrelationIdMiddleware.HeaderName)));
 
 if (builder.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {
@@ -38,8 +55,12 @@ var app = builder.Build();
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
+app.UseCors(CorsPolicy);
 
-app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 
 app.MapGet("/health", async (TempTrackDbContext db, CancellationToken ct) =>
 {
