@@ -1,0 +1,63 @@
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a; /* 17:1 on bg */
+  --color-header-bg: #0b3d91;
+  --color-header-text: #ffffff; /* 10:1 on header */
+  --color-focus: #ffbf47; /* 3:1+ against both header and page */
+  --color-focus-inner: #1a1a1a;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  box-shadow: 0 0 0 5px var(--color-focus-inner);
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+
+.skip-link:focus {
+  left: 0;
+  padding: 0.5rem 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  z-index: 10;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
+}
+
+.app-header ul {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-header a {
+  color: var(--color-header-text);
+}
+
+.app-header a[aria-current='page'] {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+main {
+  padding: 1rem;
+}
