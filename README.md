@@ -26,6 +26,19 @@ Node 22+. From `src/web`: `npm ci`, then `npm run dev` (reads `public/config.jso
 Checks: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`.
 `npm run gen:api` regenerates `src/api/schema.d.ts` from `docs/api/openapi.json`.
 
+## Run the API locally
+
+.NET 10 SDK and a PostgreSQL 17 database. From the repo root: `dotnet run --project src/api`. Config comes from environment variables:
+
+| Variable | Purpose |
+| --- | --- |
+| `ConnectionStrings__Default` | Required; startup fails without it. Example: `Host=localhost;Database=temptrack;Username=...;Password=...` |
+| `Database__MigrateOnStartup` | `true` applies EF migrations at startup |
+| `Seed__Enabled` | `true` loads the synthetic reference data (idempotent) |
+| `Cors__AllowedOrigins__0` | Allowed SPA origin (add `__1`, ... for more); no wildcard. Development defaults to `http://localhost:5173` |
+
+`/openapi/v1.json` is served in Development only; `docs/api/openapi.json` is regenerated on build.
+
 ## CI
 
 `.github/workflows/ci.yml` runs on every PR: `build-test-api` (locked restore, warnings-as-errors build, `dotnet format --verify-no-changes`, tests with coverage), `build-test-web` (lint, format, typecheck, generated-types check, tests with coverage, build), `build-test` (aggregate gate), `sbom` and `validate-project`. Coverage is report-only in the PoC (step summary and artifacts).
