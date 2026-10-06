@@ -1,0 +1,41 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "email": "manager.a@example.invalid",
+      "displayName": "Alex Example (Ward A Manager)",
+      "role": "Manager",
+      "homeDepartment": "WARD-A"
+    },
+    {
+      "email": "manager.b@example.invalid",
+      "displayName": "Bo Example (Ward B Manager)",
+      "role": "Manager",
+      "homeDepartment": "WARD-B"
+    },
+    {
+      "email": "hon@example.invalid",
+      "displayName": "Casey Example (Head of Nursing)",
+      "role": "HeadOfNursing",
+      "homeDepartment": null
+    },
+    {
+      "email": "cno@example.invalid",
+      "displayName": "Drew Example (CNO)",
+      "role": "CNO",
+      "homeDepartment": null
+    },
+    {
+      "email": "finance@example.invalid",
+      "displayName": "Erin Example (Finance)",
+      "role": "Finance",
+      "homeDepartment": null
+    },
+    {
+      "email": "admin@example.invalid",
+      "displayName": "Frankie Example (Admin)",
+      "role": "Admin",
+      "homeDepartment": null
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "staffType": "Overtime",
+      "band": 2,
+      "hourlyRate": 13.5
+    },
+    {
+      "staffType": "Overtime",
+      "band": 3,
+      "hourlyRate": 15
+    },
+    {
+      "staffType": "Overtime",
+      "band": 4,
+      "hourlyRate": 17.5
+    },
+    {
+      "staffType": "Overtime",
+      "band": 5,
+      "hourlyRate": 21
+    },
+    {
+      "staffType": "Overtime",
+      "band": 6,
+      "hourlyRate": 26
+    },
+    {
+      "staffType": "Overtime",
+      "band": 7,
+      "hourlyRate": 32
+    },
+    {
+      "staffType": "Bank",
+      "band": 2,
+      "hourlyRate": 14.85
+    },
+    {
+      "staffType": "Bank",
+      "band": 3,
+      "hourlyRate": 16.5
+    },
+    {
+      "staffType": "Bank",
+      "band": 4,
+      "hourlyRate": 19.25
+    },
+    {
+      "staffType": "Bank",
+      "band": 5,
+      "hourlyRate": 23.1
+    },
+    {
+      "staffType": "Bank",
+      "band": 6,
+      "hourlyRate": 28.6
+    },
+    {
+      "staffType": "Bank",
+      "band": 7,
+      "hourlyRate": 35.2
+    },
+    {
+      "staffType": "Agency",
+      "band": 2,
+      "hourlyRate": 24.3
+    },
+    {
+      "staffType": "Agency",
+      "band": 3,
+      "hourlyRate": 27
+    },
+    {
+      "staffType": "Agency",
+      "band": 4,
+      "hourlyRate": 31.5
+    },
+    {
+      "staffType": "Agency",
+      "band": 5,
+      "hourlyRate": 37.8
+    },
+    {
+      "staffType": "Agency",
+      "band": 6,
+      "hourlyRate": 46.8
+    },
+    {
+      "staffType": "Agency",
+      "band": 7,
+      "hourlyRate": 57.6
+    }
+  ]
+}

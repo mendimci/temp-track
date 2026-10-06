@@ -4,7 +4,7 @@ using Testcontainers.PostgreSql;
 
 namespace TempTrack.Api.Tests;
 
-public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _db = new PostgreSqlBuilder("postgres:17-alpine").Build();
 

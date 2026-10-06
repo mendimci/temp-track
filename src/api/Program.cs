@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TempTrack.Api.Infrastructure.Http;
 using TempTrack.Api.Infrastructure.Persistence;
+using TempTrack.Api.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,11 @@ builder.Services.AddDbContext<TempTrackDbContext>(o =>
 if (builder.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {
     builder.Services.AddHostedService<MigrationHostedService>();
+}
+
+if (builder.Configuration.GetValue<bool>("Seed:Enabled"))
+{
+    builder.Services.AddHostedService<SeedHostedService>();
 }
 
 var app = builder.Build();

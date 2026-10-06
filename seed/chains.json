@@ -1,0 +1,42 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "code": "standard",
+      "name": "Standard",
+      "steps": [
+        {
+          "order": 1,
+          "role": "HeadOfNursing",
+          "label": "Head of Nursing approval"
+        },
+        {
+          "order": 2,
+          "role": "CNO",
+          "label": "CNO approval"
+        }
+      ]
+    },
+    {
+      "code": "extended",
+      "name": "Extended (Agency or high cost)",
+      "steps": [
+        {
+          "order": 1,
+          "role": "HeadOfNursing",
+          "label": "Head of Nursing approval"
+        },
+        {
+          "order": 2,
+          "role": "CNO",
+          "label": "CNO approval"
+        },
+        {
+          "order": 3,
+          "role": "Finance",
+          "label": "Agency approval"
+        }
+      ]
+    }
+  ]
+}

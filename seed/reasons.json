@@ -1,0 +1,25 @@
+{
+  "synthetic": true,
+  "items": [
+    {
+      "code": "SICKNESS",
+      "label": "Sickness"
+    },
+    {
+      "code": "VACANCY",
+      "label": "Vacancy"
+    },
+    {
+      "code": "ACUITY",
+      "label": "Increased acuity"
+    },
+    {
+      "code": "ANNUAL_LEAVE",
+      "label": "Annual leave"
+    },
+    {
+      "code": "OTHER",
+      "label": "Other"
+    }
+  ]
+}
