@@ -37,7 +37,8 @@ jobs:
             echo "::error::Dev host '$host' has no deploy step yet; the devops-engineer must add one."
             exit 1
           fi
-          echo "url=$(node scripts/project-config.mjs environments.dev.url)" >> "$GITHUB_OUTPUT"
+          api_url=$(node scripts/project-config.mjs environments.dev.api_url)
+          echo "url=${api_url:-$(node scripts/project-config.mjs environments.dev.url)}" >> "$GITHUB_OUTPUT"
           echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
 
       - if: steps.ready.outputs.skip != 'true'

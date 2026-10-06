@@ -39,8 +39,9 @@ jobs:
             echo "::error::Staging host '$host' has no deploy step yet; the devops-engineer must add one."
             exit 1
           fi
+          api_url=$(node scripts/project-config.mjs environments.staging.api_url)
           {
-            echo "url=$(node scripts/project-config.mjs environments.staging.url)"
+            echo "url=${api_url:-$(node scripts/project-config.mjs environments.staging.url)}"
             echo "image=ghcr.io/${GITHUB_REPOSITORY,,}"
             echo "sha=$(git rev-parse HEAD)"
           } >> "$GITHUB_OUTPUT"
