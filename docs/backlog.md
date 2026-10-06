@@ -16,15 +16,15 @@
 | [TT-6](backlog/items/TT-6.md) | Reporting and Excel export | backlog | 0/3 |
 | [TT-7](backlog/items/TT-7.md) | Deferred beyond PoC | backlog | 0/0 |
 
-## In progress (1)
+## In progress (0)
+
+_None_
+
+## In review (1)
 
 | Key | Type | Title | Parent | Labels | Est | PR |
 | --- | --- | --- | --- | --- | --- | --- |
-| [TT-25](backlog/items/TT-25.md) | task | Scaffold React SPA with app shell and API client | TT-9 | frontend | M |  |
-
-## In review (0)
-
-_None_
+| [TT-25](backlog/items/TT-25.md) | task | Scaffold React SPA with app shell and API client | TT-9 | frontend | M | [#5](https://github.com/mendimci/temp-track/pull/5) |
 
 ## Ready (3)
 
